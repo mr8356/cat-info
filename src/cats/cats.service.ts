@@ -5,6 +5,7 @@ import { CatRequestDto } from './dto/cats.request.dto';
 import { Cat } from './cats.schema';
 import * as bcrypt from 'bcrypt';
 
+
 @Injectable()
 export class CatsService {
     constructor(@InjectModel(Cat.name) private readonly catModel: Model<Cat>){}
@@ -28,4 +29,5 @@ export class CatsService {
         
         return cat.readOnlyData;
     }
+
 }

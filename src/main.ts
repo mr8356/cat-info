@@ -31,3 +31,6 @@ bootstrap();
 
 // api 문서 만들기
 // npm i --save @nestjs/swagger swagger-ui-express
+
+// 정적할당
+// npm install --save @nestjs/serve-static

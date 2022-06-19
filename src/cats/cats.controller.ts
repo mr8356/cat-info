@@ -10,7 +10,7 @@ export class CatsController {
 
     @Get()
     getCurrentCat(){
-        
+    
     }
 
     // 제목 붙여줌

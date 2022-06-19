@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- head 부분에 텍스트 인코딩 타입 utf-8로 작성 -->
+		<meta charset="utf-8" /> 
+		<!-- 브라우저 상단 탭에 제목으로 나옴 -->
+	<title>회원가입 실습</title>
+	<!-- 자바스크립트 작성 -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		function check_password(pass){
+			var exp = /[@#$]+[a-z]+[A-Z]+[^~`|%^&*\'";:/?]/;
+			return exp.test(pass);
+		}
+		// show 함수
+		function show() {
+			var form = document.myform; //입력양식을 가져옴.
+			var email = form["email"].value;
+			var name = form["name"].value;
+			var password = form["pass"].value;
+			if(email.length==0){
+				alert("이메일은 필수 입력입니다.");
+				return false;
+			}
+			else if(email.length<6){
+				alert("이메일은 6자리 이상입니다.");
+				return false;
+			}
+			else if(name.length==0){
+				alert("이름은 필수 입력입니다.");
+				return false;
+			}
+			else if(password.length==0){
+				alert("비밀번호는 필수 입력입니다.");
+				return false;
+			}
+			else if(password.length<6){
+				alert("비밀번호는 6자리 이상입니다.");
+				return false;
+			}
+			else if(!(/[0-9]+/).test(password)){
+				alert("비밀번호에 숫자가 포함되어야합니다.");
+				return false;
+			}
+			else if(!(/[a-zA-Z]+/).test(password)){
+				alert("비밀번호에 영문이 포함되어야합니다.");
+				return false;
+			}
+			else if((/[~`!%^&*|\'";:/?]+/).test(password)){
+				alert("비밀번호에 특수문자 ~`|%^&*\\'\";:/?는 포함될 수 없습니다.");
+				return false;
+			}
+			else {
+				var postReq = $.ajax({
+					type: "POST",
+					url: "/cats",
+					data: {
+						"email":email,
+						"name":name,
+						"password":password
+					},
+					dataType: "JSON",
+					success : function(result){
+						alert(result.name);
+					}
+				});
+			}
+		}
+		function get() {
+			var getReq = $.ajax({
+					type: "GET",
+					url: "/cats"
+			});
+			getReq.done(function (data) {
+				var tb = $("<table/>");
+				var row = $("<tr/>").append(
+					$("<th/>").text("이메일"),
+					$("<th/>").text("id"),
+					$("<th/>").text("이름"),
+				);
+				tb.append(row);
+				for(var i = 0; i<data.length; i++){
+					var email= data[i].email;
+					var id = data[i].id;
+					var name = data[i].name;
+					var row = $("<tr/>").append(
+						$("<th/>").text(email),
+						$("<th/>").text(id),
+						$("<th/>").text(name));
+					tb.append(row);
+				}
+				$("#textbox").html(tb);
+			});
+		}
+	</script>
+	</head>
+	<body>
+		<h1>▶︎고양이😻 회원가입<br></h1>
+		<form method="post" name="myform">
+		<table border="1" bgcolor="white" bordercolor="black">
+			<tr>
+				<td>* 이메일:</td>
+				<td><input type="text" name="email" maxlength="20" size="30" /></td>
+			</tr>
+			<tr>
+				<td>* 이름 :</td>
+				<td><input type="text" name="name" maxlength="12" size="15" /></td>
+			</tr>
+			<tr>
+				<td>* 비밀번호 :</td>
+				<td><input type="password" name="pass" maxlength="10" size="15" /></td>
+			</tr>
+		<!-- 자바스크립트에서 작성한 것 실행 -->
+		<br><input type="button" value="회원 가입" onclick="show();">
+		<br><input type="button" value="불러오기" onclick="get();">
+		<input type="reset" value="다시 작성">
+		<div id="textbox">
+
+		</div>
+	</form>
+	</body>
+</html>

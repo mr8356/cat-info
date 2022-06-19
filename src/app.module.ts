@@ -5,6 +5,8 @@ import { AppService } from './app.service';
 import { LoggerMiddleware } from './logger.middleware';
 import { CatsModule } from './cats/cats.module';
 import { ConfigModule } from '@nestjs/config';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -12,7 +14,9 @@ import { ConfigModule } from '@nestjs/config';
     MongooseModule.forRoot(process.env.MONGODB_URL , {
     useNewUrlParser : true,
     useUnifiedTopology : true
-  }), CatsModule
+    }),
+    CatsModule,
+    ServeStaticModule.forRoot({rootPath: join(__dirname, '..', 'client')})
 ],
   controllers: [AppController],
   providers: [AppService],
