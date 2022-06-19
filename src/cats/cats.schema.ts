@@ -31,11 +31,8 @@ export class Cat extends Document{
     @IsNotEmpty()
     password: string;
 
-    @Prop({
-        required: true,
-    })
+    @Prop()
     @IsString()
-    @IsNotEmpty()
     imgUrl: string;
 }
 
