@@ -7,6 +7,7 @@ import { CatsModule } from './cats/cats.module';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -16,7 +17,9 @@ import { join } from 'path';
     useUnifiedTopology : true
     }),
     CatsModule,
-    ServeStaticModule.forRoot({rootPath: join(__dirname, '..', 'client')})
+    ServeStaticModule.forRoot({rootPath: join(__dirname, '..', 'client')}),
+    AuthModule
+    // 정적 파일
 ],
   controllers: [AppController],
   providers: [AppService],

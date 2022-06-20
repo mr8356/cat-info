@@ -1,16 +1,22 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
+import { AuthService } from 'src/auth/auth.service';
+import { LoginRequestDto } from 'src/auth/dto/login.request.dto';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CatsService } from './cats.service';
-import { CatRequestDto } from './dto/cats.request.dto';
+import { CatRequestDto } from './dto/cats.request.dto';;
+import { Request } from 'express';
 
 @Controller('cats')
 export class CatsController {
-    constructor(private readonly catsService: CatsService){}
-
-
-    @Get()
-    getCurrentCat(){
+    constructor(private readonly catsService: CatsService,
+        private readonly authService: AuthService,
+        ){}
     
+    @UseGuards(JwtAuthGuard)
+    @Get()
+    getCurrentCat(@Req() req : Request){
+        return req.user;
     }
 
     // 제목 붙여줌
@@ -22,8 +28,8 @@ export class CatsController {
 
     
     @Post('login')
-    logIn(@Body() body){
-        return body;
+    logIn(@Body() body:LoginRequestDto){
+        return this.authService.jwtLogIn(body);
     }
 
     @Post('logout')
