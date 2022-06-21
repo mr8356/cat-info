@@ -44,7 +44,7 @@ export class CatsController {
 
     }
 
-    @Post('upload/cats')
+    @Post('upload')
     uploadCatImg(){
 
     }
