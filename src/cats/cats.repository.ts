@@ -43,4 +43,12 @@ export class CatsRepository{
     async findAll() {
         return await this.catModel.find();
     }
+
+    async findCatByIdAndUpadteImg(catId : string , filename : string){
+        const cat  = await this.catModel.findById(catId);
+        cat.imgUrl = `http://localhost:3000/media/${filename}`;
+        const newCat = await cat.save();
+        console.log(newCat);
+        return newCat.readOnlyData;
+    }
 }

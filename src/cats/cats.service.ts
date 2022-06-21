@@ -36,4 +36,15 @@ export class CatsService {
         this.catsRespository.findAll();
     }
 
+    async uploadImg(cat : Cat , files : Express.Multer.File[]){
+        const filename = `cats/${files[0].filename}`;
+        console.log(filename);
+        const newCat = await this.catsRespository.findCatByIdAndUpadteImg(
+            cat.id,
+            filename
+        )
+        // console.log(newCat);
+        return newCat.imgUrl;
+    }
+
 }
