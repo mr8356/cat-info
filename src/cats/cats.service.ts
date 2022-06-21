@@ -33,7 +33,9 @@ export class CatsService {
     }
 
     async getAll() {
-        this.catsRespository.findAll();
+        const allCat = await this.catsRespository.findAll();
+        const readOnlyCats = allCat.map((cat) => cat.readOnlyData);
+        return readOnlyCats;
     }
 
     async uploadImg(cat : Cat , files : Express.Multer.File[]){

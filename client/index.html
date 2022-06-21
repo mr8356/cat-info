@@ -76,31 +76,22 @@
 					dataType : "JSON"
 			});
 			getReq.done(function (data) {
+				$("#textbox").empty();
 				var tb = $("<table/>").css("border" , "1px solid black");
 				var row = $("<tr/>").append(
 					$("<th/>").text("이메일"),
-					$("<th/>").text("id"),
+					$("<th/>").text("사진"),
 					$("<th/>").text("이름"),
 				);
 				tb.append(row);
 				var email= data.email;
-				var id = data._id;
+				var img = data.imgUrl;
 				var name = data.name;
 				var r = $("<tr/>").append(
 					$("<td/>").text(email),
-					$("<td/>").text(id),
+					$("<td/>").append($("<img/>").attr("src" , img).width(50)),
 					$("<td/>").text(name));
 				tb.append(r);
-				// for(var i = 0; i<data.length; i++){
-				// 	var email= data[i].email;
-				// 	var id = data[i]._id;
-				// 	var name = data[i].name;
-				// 	var r = $("<tr/>").append(
-				// 		$("<td/>").text(email),
-				// 		$("<td/>").text(id),
-				// 		$("<td/>").text(name));
-				// 	tb.append(r);
-				// }
 				$("#textbox").html(tb);
 			});
 		}
@@ -124,6 +115,35 @@
 					}
 				});
 		}
+		function getAll() {
+			$("#textbox").empty();
+			var getReq = $.ajax({
+					type: "GET",
+					url: "/cats/all",
+					headers : headerParams,
+					dataType : "JSON"
+			});
+			getReq.done(function (data) {
+				var tb = $("<table/>").css("border" , "1px solid black");
+				var row = $("<tr/>").append(
+					$("<th/>").text("이메일"),
+					$("<th/>").text("id"),
+					$("<th/>").text("이름"),
+				);
+				tb.append(row);
+				for(var i = 0; i<data.length; i++){
+					var email= data[i].email;
+					var img = data[i].imgUrl;
+					var name = data[i].name;
+					var r = $("<tr/>").append(
+						$("<td/>").text(email),
+						$("<td/>").append($("<img/>").attr("src" , img).width(50)),
+						$("<td/>").text(name));
+					tb.append(r);
+				}
+				$("#textbox").html(tb);
+			});
+		}
 	</script>
 	</head>
 	<body>
@@ -146,6 +166,7 @@
 		<br><input type="button" value="회원 가입" onclick="show();">
 		<br><input type="button" value="불러오기" onclick="get();">
 		<br><input type="button" value="로그인" onclick="login();">
+		<br><input type="button" value="고양이들 탐색" onclick="getAll();">
 		<input type="reset" value="다시 작성">
 	</form>
 	<div id="textbox">
