@@ -6,6 +6,7 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CatsService } from './cats.service';
 import { CatRequestDto } from './dto/cats.request.dto';;
 import { Request } from 'express';
+import { Cat } from './cats.schema';
 
 @Controller('cats')
 export class CatsController {
@@ -18,6 +19,12 @@ export class CatsController {
     getCurrentCat(@Req() req : Request){
         return req.user;
     }
+
+    @Get('all')
+    async getAll(){
+        return this.catsService.getAll();
+    }
+
 
     // 제목 붙여줌
     @ApiOperation({ summary : '회원가입'})

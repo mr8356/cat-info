@@ -9,11 +9,11 @@ import { CatsRepository } from './cats.repository';
 
 @Injectable()
 export class CatsService {
-    constructor(private readonly catsRespotory: CatsRepository){}
+    constructor(private readonly catsRespository: CatsRepository){}
 
     async signUp(body : CatRequestDto){
         const { email , name , password} = body;
-        const isCatExist = await this.catsRespotory.existByEmail(email);
+        const isCatExist = await this.catsRespository.existByEmail(email);
         if (isCatExist) {
             throw new HttpException('해당하는 고양이는 이미 존재합니다.' , 403);
         }
@@ -24,12 +24,16 @@ export class CatsService {
         // import * as bcrypt from 'bcrypt';
         const hashedPassword = await bcrypt.hash(password,10);
 
-        const cat = await this.catsRespotory.create({
+        const cat = await this.catsRespository.create({
             email,
             name,
             password: hashedPassword
         });
         return cat.readOnlyData;
+    }
+
+    async getAll() {
+        this.catsRespository.findAll();
     }
 
 }

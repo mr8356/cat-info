@@ -8,6 +8,8 @@
 	<!-- 자바스크립트 작성 -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
+		var mytoken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhdGRkZEBuYXZlci5jb20iLCJzdWIiOiI2MmIwOWEyYWYwNjYzMjA5OGUxYjc4ZjIiLCJpYXQiOjE2NTU3NDE5MzUsImV4cCI6MTY4NzI5OTUzNX0.Ufzi1zSEvF9HIMjXUnqRu2zzpboCpTs-FEC8TKIIFiM";
+		var headerParams = {'Authorization' : "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhdGRkZEBuYXZlci5jb20iLCJzdWIiOiI2MmIwOWEyYWYwNjYzMjA5OGUxYjc4ZjIiLCJpYXQiOjE2NTU3NDE5MzUsImV4cCI6MTY4NzI5OTUzNX0.Ufzi1zSEvF9HIMjXUnqRu2zzpboCpTs-FEC8TKIIFiM"};
 		function check_password(pass){
 			var exp = /[@#$]+[a-z]+[A-Z]+[^~`|%^&*\'";:/?]/;
 			return exp.test(pass);
@@ -61,7 +63,7 @@
 					},
 					dataType: "JSON",
 					success : function(result){
-						alert(result.name);
+						console.log(result.name);
 					}
 				});
 			}
@@ -69,28 +71,58 @@
 		function get() {
 			var getReq = $.ajax({
 					type: "GET",
-					url: "/cats"
+					url: "/cats",
+					headers : headerParams,
+					dataType : "JSON"
 			});
 			getReq.done(function (data) {
-				var tb = $("<table/>");
+				var tb = $("<table/>").css("border" , "1px solid black");
 				var row = $("<tr/>").append(
 					$("<th/>").text("이메일"),
 					$("<th/>").text("id"),
 					$("<th/>").text("이름"),
 				);
 				tb.append(row);
-				for(var i = 0; i<data.length; i++){
-					var email= data[i].email;
-					var id = data[i].id;
-					var name = data[i].name;
-					var row = $("<tr/>").append(
-						$("<th/>").text(email),
-						$("<th/>").text(id),
-						$("<th/>").text(name));
-					tb.append(row);
-				}
+				var email= data.email;
+				var id = data._id;
+				var name = data.name;
+				var r = $("<tr/>").append(
+					$("<td/>").text(email),
+					$("<td/>").text(id),
+					$("<td/>").text(name));
+				tb.append(r);
+				// for(var i = 0; i<data.length; i++){
+				// 	var email= data[i].email;
+				// 	var id = data[i]._id;
+				// 	var name = data[i].name;
+				// 	var r = $("<tr/>").append(
+				// 		$("<td/>").text(email),
+				// 		$("<td/>").text(id),
+				// 		$("<td/>").text(name));
+				// 	tb.append(r);
+				// }
 				$("#textbox").html(tb);
 			});
+		}
+		function login() {
+			var form = document.myform; //입력양식을 가져옴.
+			var email = form["email"].value;
+			var password = form["pass"].value;
+			var postReq = $.ajax({
+					type: "POST",
+					url: "/cats/login",
+					data: {
+						"email":email,
+						"password":password
+					},
+					dataType: "JSON",
+					success : function(result){
+						console.log(result.token);
+						mytoken = result.token;
+						headerParams = {'Authorization' : 'bearer '+mytoken};
+						get();
+					}
+				});
 		}
 	</script>
 	</head>
@@ -108,15 +140,16 @@
 			</tr>
 			<tr>
 				<td>* 비밀번호 :</td>
-				<td><input type="password" name="pass" maxlength="10" size="15" /></td>
+				<td><input type="password" name="pass" maxlength="30" size="30" /></td>
 			</tr>
 		<!-- 자바스크립트에서 작성한 것 실행 -->
 		<br><input type="button" value="회원 가입" onclick="show();">
 		<br><input type="button" value="불러오기" onclick="get();">
+		<br><input type="button" value="로그인" onclick="login();">
 		<input type="reset" value="다시 작성">
-		<div id="textbox">
-
-		</div>
 	</form>
+	<div id="textbox">
+		
+	</div>
 	</body>
 </html>

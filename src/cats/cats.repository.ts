@@ -39,4 +39,8 @@ export class CatsRepository{
         const cat = await this.catModel.findById(catId).select('-password');
         return cat;
     }
+
+    async findAll() {
+        return await this.catModel.find();
+    }
 }
