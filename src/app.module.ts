@@ -8,10 +8,13 @@ import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
+import { AwsService } from './aws.service';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true
+    }),
     MongooseModule.forRoot(process.env.MONGODB_URL , {
     useNewUrlParser : true,
     useUnifiedTopology : true
@@ -22,7 +25,7 @@ import { AuthModule } from './auth/auth.module';
     // 정적 파일
 ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService , AwsService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

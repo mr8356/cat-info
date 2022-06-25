@@ -1,13 +1,15 @@
 import { HttpException, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
+import { AwsService } from "src/aws.service";
 import { Cat } from "./cats.schema";
 import { CatRequestDto } from "./dto/cats.request.dto";
 
 
 @Injectable()
 export class CatsRepository{
-    constructor(@InjectModel(Cat.name) private readonly catModel : Model<Cat>){}
+    constructor(@InjectModel(Cat.name) private readonly catModel : Model<Cat>,
+    private awsService : AwsService){}
     
     async existByEmail(email:string): Promise<boolean>{
         var result;
@@ -46,7 +48,7 @@ export class CatsRepository{
 
     async findCatByIdAndUpadteImg(catId : string , filename : string){
         const cat  = await this.catModel.findById(catId);
-        cat.imgUrl = `http://localhost:3000/media/${filename}`;
+        cat.imgUrl = this.awsService.getAwsS3FileUrl(catId);
         const newCat = await cat.save();
         console.log(newCat);
         return newCat.readOnlyData;

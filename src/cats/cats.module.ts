@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MulterModule } from '@nestjs/platform-express/multer';
 import { AuthModule } from 'src/auth/auth.module';
+import { AwsService } from 'src/aws.service';
 import { CatsController } from './cats.controller';
 import { CatsRepository } from './cats.repository';
 
@@ -20,7 +21,7 @@ import { CatsService } from './cats.service';
     
 ],
   controllers: [CatsController],
-  providers: [CatsService , CatsRepository],
+  providers: [CatsService , CatsRepository , AwsService],
   exports: [CatsService , CatsRepository]
 })
 export class CatsModule {}

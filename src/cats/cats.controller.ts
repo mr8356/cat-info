@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { AuthService } from 'src/auth/auth.service';
 import { LoginRequestDto } from 'src/auth/dto/login.request.dto';
@@ -10,11 +10,13 @@ import { Cat } from './cats.schema';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/common/utils/multer.options';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
+import { AwsService } from 'src/aws.service';
 
 @Controller('cats')
 export class CatsController {
     constructor(private readonly catsService: CatsService,
         private readonly authService: AuthService,
+        private readonly awsService : AwsService,
         ){}
     
     @UseGuards(JwtAuthGuard)
@@ -48,12 +50,12 @@ export class CatsController {
     }
 
     @ApiOperation({ summary : '고양이 이미지 업로드'})
-    @UseInterceptors(FilesInterceptor('image',10 ,multerOptions('cats'))) //multerOptions('cats') 
+    @UseInterceptors(FileInterceptor('image',multerOptions('cats'))) //multerOptions('cats') 
     @UseGuards(JwtAuthGuard) // 토큰이 필요함
     @Post('upload')
-    uploadCatImg(@UploadedFiles() files : Express.Multer.File[] , @CurrentUser() cat:Cat){
+    async uploadCatImg(@UploadedFile() file : Express.Multer.File , @CurrentUser() cat:Cat){
         // return {image : `http://localhost:3000/media/cats/${files[0].filename}` };
-        return this.catsService.uploadImg(cat , files);
+        return await this.awsService.uploadFileToS3('cats' , file);
     }
     
 
