@@ -34,7 +34,8 @@ TypeScript , MongoDB , NestJS , AWS
 ## Installation
 
 ```bash
-$ npm install
+$ npm i -g @nestjs/cli
+$ nest new project-name
 ```
 
 ## Running the app
