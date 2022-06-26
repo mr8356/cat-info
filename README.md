@@ -22,7 +22,7 @@ TypeScript , MongoDB , NestJS , AWS
 ## 네스트란?
 
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="100" alt="Nest Logo" /></a>
 </p>
 네스트JS는 nodejs 프레임워크로 npm을 이용해 설치할수 있습니다.
 주 언어는 TS이고, 구조가 java 스프링이랑 거의 동일합니다.
