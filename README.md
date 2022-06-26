@@ -12,6 +12,13 @@
 
 
 
+## 기술 Stack
+
+TypeScript , MongoDB , NestJS , AWS
+
+
+
+
 ## 네스트란?
 
 <p align="center">
